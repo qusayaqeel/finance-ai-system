@@ -1,0 +1,19 @@
+# Environment variables
+.env
+.env.*
+
+# Data
+data/raw/
+saved_models/
+
+# Python caching
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter
+.ipynb_checkpoints
+
+# Frontend
+node_modules/
+dist/

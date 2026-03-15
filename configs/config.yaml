@@ -1,0 +1,36 @@
+# Configuration variables
+
+tickers:
+  - AAPL
+  - MSFT
+  - GOOGL
+  - AMZN
+  - TSLA
+
+data:
+  window_size: 30
+  train_start_date: "2010-01-01"
+  train_end_date: "2022-12-31"
+  val_start_date: "2023-01-01"
+  val_end_date: "2023-12-31"
+  test_start_date: "2024-01-01"
+  test_end_date: "2024-12-31"
+
+scheduler:
+  timezone: "US/Eastern"
+  market_close_run_time: "16:30"
+
+models:
+  random_forest:
+    n_estimators: 100
+    max_depth: 10
+  xgboost:
+    learning_rate: 0.1
+    n_estimators: 200
+  lstm:
+    hidden_size: 64
+    num_layers: 2
+    dropout: 0.2
+    learning_rate: 0.001
+    epochs: 50
+    batch_size: 32
