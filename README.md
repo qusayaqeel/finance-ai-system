@@ -19,6 +19,25 @@ A comprehensive system to predict stock price direction (UP/DOWN) and explain th
 - **Frontend:** React, Recharts
 - **Data:** yfinance, pandas, numpy
 
+## 📂 Project Architecture
+
+```plaintext
+finance-ai-system/
+├── data/           # يحتفظ بالبيانات (Raw الخام، Processed للميزات، Synthetic المولّدة بواسطة GAN).
+├── notebooks/      # بيئة التجارب (Jupyter). لعمل الـ EDA وتصميم النماذج قبل برمجتها النهائية.
+├── src/            # المنطق الأساسي للمشروع (Core Logic). وتتفرع إلى:
+│   ├── data/           # سحب البيانات وإعداد هندسة الميزات (RSI, MACD, Volume).
+│   ├── models/         # خوارزميات الذكاء الاصطناعي (Classical، Deep Learning، GANs).
+│   ├── explainability/ # تطبيق تقنية SHAP لتفسير قرارات الصندوق الأسود (XAI).
+│   ├── evaluation/     # تقييم النماذج (Accuracy, Sharpe ratio, وغيرها).
+│   └── chatbot/        # ممر لترجمة أرقام SHAP المعقدة إلى نصوص مفهومة عبر LLM.
+├── backend/        # واجهة برمجة التطبيقات (FastAPI) والمجدول الزمني للتدريب والسحب اليومي.
+├── frontend/       # واجهة المستخدم (React) وعروض الرسوم البيانية التفاعلية.
+├── saved_models/   # تخزين أوزان النماذج للمنصة لضمان سرعة التنبؤ (Inference).
+├── tests/          # اختبارات الوحدة (Unit Tests).
+└── configs/        # إعدادات النظام المركزية للتحكم بالأسهم والموديلات.
+```
+
 ## ⚙️ Setup & Installation
 
 ### 1. Clone & Install Dependencies

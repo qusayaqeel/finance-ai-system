@@ -2,9 +2,6 @@
 .env
 .env.*
 
-# Data
-data/raw/
-saved_models/
 
 # Python caching
 __pycache__/
