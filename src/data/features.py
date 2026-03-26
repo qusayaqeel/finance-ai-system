@@ -72,7 +72,11 @@ def engineer_features(input_path="data/raw/historical_stock_data.csv", output_pa
         return group.iloc[:-1]
 
     # Calculate features for each ticker
-    processed_df = df.groupby('Ticker', group_keys=False).apply(add_features).reset_index(drop=True)
+    processed_dfs = []
+    for ticker, group in df.groupby('Ticker'):
+        processed_dfs.append(add_features(group))
+    
+    processed_df = pd.concat(processed_dfs, ignore_index=True)
     
     # Drop initial rows with NaN due to rolling windows (e.g., SMA_50 needs 50 days)
     processed_df.dropna(inplace=True)
