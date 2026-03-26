@@ -38,6 +38,20 @@ finance-ai-system/
 └── configs/        # إعدادات النظام المركزية للتحكم بالأسهم والموديلات.
 ```
 
+## 📊 Data Dictionary
+
+The processed dataset in (`data/processed/processed_stock_data.csv`) contains the following columns engineered for AI model training:
+
+- **Date:** The trading date.
+- **Open, High, Low, Close:** The daily opening, highest, lowest, and closing prices of the stock.
+- **Volume:** The number of shares traded during the day.
+- **Ticker:** The stock symbol (e.g., AAPL, MSFT).
+- **SMA_20 / SMA_50:** Simple Moving Averages for 20 and 50 days. (Helps the AI identify the general trend and filter daily noise).
+- **RSI_14:** Relative Strength Index. (Measures if a stock is overbought or oversold to anticipate price corrections).
+- **MACD / MACD_Signal:** Moving Average Convergence Divergence. (Identifies changes in momentum and potential upcoming trend reversals).
+- **Bollinger_Upper / Bollinger_Lower:** Bollinger Bands. (Measures market volatility; upper band indicates a relative high, lower indicates a low).
+- **Target_Direction:** The target variable the model will train on. `1` if tomorrow's closing price is *higher* than today's, and `0` if it's lower or equal.
+
 ## ⚙️ Setup & Installation
 
 ### 1. Clone & Install Dependencies
