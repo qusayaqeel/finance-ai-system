@@ -5,16 +5,18 @@ tickers:
   - MSFT
   - GOOGL
   - AMZN
+  - NVDA
   - TSLA
+  - META
 
 data:
   window_size: 30
-  train_start_date: "2010-01-01"
-  train_end_date: "2022-12-31"
-  val_start_date: "2023-01-01"
-  val_end_date: "2023-12-31"
-  test_start_date: "2024-01-01"
-  test_end_date: "2024-12-31"
+  train_start_date: "2021-06-07"
+  train_end_date: "2024-03-31"
+  val_start_date: "2024-04-01"
+  val_end_date: "2025-03-31"
+  test_start_date: "2025-04-01"
+  test_end_date: "2026-03-25"
 
 scheduler:
   timezone: "US/Eastern"
