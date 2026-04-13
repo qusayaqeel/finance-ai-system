@@ -1,1 +1,0 @@
-"""Router for prediction endpoints."""
