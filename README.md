@@ -1,85 +1,78 @@
-# Financial Market Forecasting & AI Chatbot System
+# Financial Market Forecasting & Anomaly Detection System
 
-A comprehensive system to predict stock price direction (UP/DOWN) and explain the predictions in plain language via an AI chatbot using SHAP values and an LLM API.
+## 📌 Overview
+This project focuses on building a machine learning pipeline to predict stock price directions (UP/DOWN) and detect anomalous or fraudulent trading activities. The project leverages both Classical Machine Learning and Deep Learning models applied to time-series stock market data.
 
-## 🚀 Features
-- **Automated Data Pipeline:** Fetches raw stock data automatically from Yahoo Finance.
-- **Advanced Feature Engineering:** Calculates RSI, MACD, Moving Averages, and Bollinger Bands.
-- **Multi-stage Modeling Pipeline:**
-  - *Phase 1:* Classical ML (KNN, Naive Bayes, Random Forest, XGBoost)
-  - *Phase 2:* Deep Learning (1D-CNN, Autoencoder, LSTM/GRU)
-  - *Phase 3:* Advanced (Transformer, GAN for synthetic data)
-- **XAI (Explainable AI):** Uses SHAP values to interpret model decisions.
-- **AI Chatbot Interface:** Translates complex SHAP metrics into human-readable explanations.
-- **Automated Scheduler:** Runs daily inference automatically after market close.
+## ⚠️ Problems Solved
+1. **Market Trend Prediction:** Predicting whether a stock's closing price will go up or down using historical data and technical indicators.
+2. **Anomaly Detection:** Identifying irregular trading days that deviate from normal market behavior, which could indicate fraudulent activity or extreme market events.
 
-## 🛠️ Tech Stack
-- **Machine Learning:** PyTorch, scikit-learn, XGBoost, SHAP
-- **Backend:** FastAPI, apscheduler
-- **Frontend:** React, Recharts
-- **Data:** yfinance, pandas, numpy
+## 🚀 Project Phases & Details
+
+### Phase 1: Data & Classical ML (Implemented in `notebooks/phase-1.ipynb`)
+- **Data Fetching:** Python scripts to download historical stock data using the `yfinance` library (`src/data/fetcher.py`).
+- **Feature Engineering:** Calculating key technical indicators such as Moving Averages, RSI, MACD, and Bollinger Bands (`src/data/features.py`).
+- **Exploratory Data Analysis (EDA):** Analyzing feature correlations and rolling statistics.
+- **Classical Models:** 
+  - `KNeighborsRegressor` for basic price modeling.
+  - `GaussianNB` (Naive Bayes) for buy/sell signal classification.
+  - `PCA` for dimensionality reduction.
+  - Ensemble methods (`RandomForest` and `XGBoost`) utilizing `GridSearchCV` for hyperparameter tuning.
+
+### Phase 2: Deep Learning (Implemented in `notebooks/phase-2.ipynb`)
+- **1D-CNN (Convolutional Neural Networks):** A specialized architecture for time-series pattern recognition, predicting UP/DOWN price movements. Built with Dropout layers and GlobalAveragePooling to prevent overfitting.
+- **AutoEncoder (Anomaly Detection):** An unsupervised learning model trained on normal stock behaviors. It flags days with a reconstruction error (MSE) higher than the 95th percentile as anomalies.
+- **Transfer Learning:** Demonstrates how to take a pre-trained model on one stock, freeze early layers, and fine-tune it on a new stock to save computational resources and improve accuracy.
+
+## 📊 Results
+- **Phase 1:** Engineered features significantly boosted the baseline performance of classical models, with ensemble methods (`Random Forest`, `XGBoost`) providing the most reliable predictions.
+- **Phase 2 (1D-CNN):** The convolutional network successfully learned complex temporal patterns, resulting in solid Accuracy and ROC-AUC scores for trend prediction.
+- **Phase 2 (AutoEncoder):** The reconstruction-based anomaly detection effectively flagged the top 5% of trading days exhibiting highly unusual price action.
+- **Phase 2 (Transfer Learning):** Showed noticeable accuracy improvements when adapting a pre-trained model to new, unseen stocks compared to training from scratch.
 
 ## 📂 Project Architecture
 
 ```plaintext
 finance-ai-system/
-├── data/           # يحتفظ بالبيانات (Raw الخام، Processed للميزات، Synthetic المولّدة بواسطة GAN).
-├── notebooks/      # بيئة التجارب (Jupyter). لعمل الـ EDA وتصميم النماذج قبل برمجتها النهائية.
-├── src/            # المنطق الأساسي للمشروع (Core Logic). وتتفرع إلى:
-│   ├── data/           # سحب البيانات وإعداد هندسة الميزات (RSI, MACD, Volume).
-│   ├── models/         # خوارزميات الذكاء الاصطناعي (Classical، Deep Learning، GANs).
-│   ├── explainability/ # تطبيق تقنية SHAP لتفسير قرارات الصندوق الأسود (XAI).
-│   ├── evaluation/     # تقييم النماذج (Accuracy, Sharpe ratio, وغيرها).
-│   └── chatbot/        # ممر لترجمة أرقام SHAP المعقدة إلى نصوص مفهومة عبر LLM.
-├── backend/        # واجهة برمجة التطبيقات (FastAPI) والمجدول الزمني للتدريب والسحب اليومي.
-├── frontend/       # واجهة المستخدم (React) وعروض الرسوم البيانية التفاعلية.
-├── saved_models/   # تخزين أوزان النماذج للمنصة لضمان سرعة التنبؤ (Inference).
-├── tests/          # اختبارات الوحدة (Unit Tests).
-└── configs/        # إعدادات النظام المركزية للتحكم بالأسهم والموديلات.
+├── data/               # Local data storage
+│   ├── raw/            # Raw historical data (e.g., historical_stock_data.csv)
+│   └── processed/      # Data with engineered features (e.g., processed_stock_data.csv)
+├── notebooks/          # Jupyter notebooks for experimentation
+│   ├── phase-1.ipynb   # EDA, Feature Engineering, and Classical ML models
+│   └── phase-2.ipynb   # Deep Learning (CNN, AutoEncoder, Transfer Learning)
+├── src/                # Core Python scripts
+│   └── data/           
+│       ├── fetcher.py  # Script to download data from Yahoo Finance
+│       └── features.py # Script to compute RSI, MACD, Bollinger Bands, etc.
+├── saved_models/       # Directory where trained models (.keras) are saved
+│   └── deep_learning/  
+├── configs/            
+│   └── config.yaml     # Configuration file for tickers, dates, and parameters
+├── .env.example        # Example environment variables file
+├── .gitignore          # Git ignore rules
+├── requirements.txt    # Project Python dependencies
+└── README.md           # Project documentation
 ```
-
-## 📊 Data Dictionary
-
-The processed dataset in (`data/processed/processed_stock_data.csv`) contains the following columns engineered for AI model training:
-
-- **Date:** The trading date.
-- **Open, High, Low, Close:** The daily opening, highest, lowest, and closing prices of the stock.
-- **Volume:** The number of shares traded during the day.
-- **Ticker:** The stock symbol (e.g., AAPL, MSFT).
-- **SMA_20 / SMA_50:** Simple Moving Averages for 20 and 50 days. (Helps the AI identify the general trend and filter daily noise).
-- **RSI_14:** Relative Strength Index. (Measures if a stock is overbought or oversold to anticipate price corrections).
-- **MACD / MACD_Signal:** Moving Average Convergence Divergence. (Identifies changes in momentum and potential upcoming trend reversals).
-- **Bollinger_Upper / Bollinger_Lower:** Bollinger Bands. (Measures market volatility; upper band indicates a relative high, lower indicates a low).
-- **Target_Direction:** The target variable the model will train on. `1` if tomorrow's closing price is *higher* than today's, and `0` if it's lower or equal.
 
 ## ⚙️ Setup & Installation
 
-### 1. Clone & Install Dependencies
+### 1. Install Dependencies
+Make sure you have Python installed, then run:
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Configure Environment
-Create a `.env` file based on `.env.example`:
-```env
-LLM_API_KEY=your_api_key_here
-```
-
-### 3. Fetch Data
-To fetch historical data for training:
+### 2. Fetch Data
+Download historical data for the configured stocks:
 ```bash
 python src/data/fetcher.py
 ```
 
-### 4. Start the Application
-**Backend:**
+### 3. Process Data & Engineer Features
+Generate technical indicators required for the models:
 ```bash
-uvicorn backend.main:app --reload
+python src/data/features.py
 ```
 
-**Frontend:**
-```bash
-cd frontend
-npm install
-npm start
-```
+### 4. Run Notebooks
+You can now open and run `notebooks/phase-1.ipynb` and `notebooks/phase-2.ipynb` to train the models and see the results!
